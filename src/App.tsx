@@ -20,20 +20,25 @@ const App = () => {
     kind: string;
   }
 
+  const nextFoodFilter = nextFood.filter((food, idx) =>
+    Math.floor(Math.random() * nextFood.length + 1)
+  );
+
+  const returnName = nextFood.map((food, idx) => {
+    if (idx === Math.floor(Math.random() * nextFood.length + 1)) {
+      return (
+        <div>
+          {food.name} - {food.kind}
+        </div>
+      );
+    }
+  });
+  console.log(returnName);
+
   return (
     <Rayout>
       <Header />
       <Main>
-        <>
-          <p>점심 랜덤으로 고르기</p>
-          <Button
-            variant="outlined"
-            color="secondary"
-            style={{ height: "100%" }}
-          >
-            누르기
-          </Button>
-        </>
         <div>
           {nextFood.map((food, idx): any => {
             return (
@@ -45,6 +50,19 @@ const App = () => {
             );
           })}
         </div>
+        <>
+          <p>점심 랜덤으로 고르기</p>
+          <Button
+            variant="outlined"
+            color="secondary"
+            style={{ height: "100%" }}
+          >
+            누르기
+          </Button>
+          <h1>추천음식은? </h1>
+
+          <h2>{returnName}</h2>
+        </>
       </Main>
     </Rayout>
   );
@@ -52,6 +70,9 @@ const App = () => {
 const Main = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
+  width: auto;
+  border: 1px solid red;
 `;
 const FoodInfo = styled.div`
   display: flex;
