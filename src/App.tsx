@@ -1,10 +1,18 @@
 import { Button } from '@mui/material';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
 import { nextFood } from './data/data';
 import { SelectFood } from './component/selectFood';
 
+interface FoodArrProps {
+    name?: string;
+    kind?: string;
+    foodName?: string;
+    newFoodName?: string;
+    foodKind?: string;
+    newFoodKind?: string;
+}
 const App = () => {
     const [count, setCount] = useState(1);
     // const [foodRandomIsOpen, setFoodRandomIsOpen] = useState(false);
@@ -22,9 +30,38 @@ const App = () => {
     //     [checkedFoods]
     // );
     // const checkedResultFood = checkedFoods[Math.floor(Math.random() * checkedFoods.length + 1)];
+    const [foodName, setFoodName] = useState<string>('');
+    const [foodKind, setFoodKind] = useState<string>('');
+    const [foodArr, setFoodArr] = useState<FoodArrProps[]>(nextFood);
+    const makeFoods = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.name === 'foodName') {
+            setFoodName(e.target.value);
+        } else {
+            setFoodKind(e.target.value);
+        }
+    };
+    console.log(foodArr);
+
+    const addFood = () => {
+        const newArr = { newFoodName: foodName, newFoodKind: foodKind };
+        setFoodArr([...nextFood, newArr]);
+    };
 
     return (
         <div>
+            <div>
+                <input type="text" name="foodName" placeholder="상호명을 입력해주세요" onChange={makeFoods} />
+                <input type="text" name="foodKind" placeholder="종류를 입력해주세요" onChange={makeFoods} />
+                <button onClick={addFood}>추가하기</button>
+                {foodArr?.map((e) => {
+                    return (
+                        <div>
+                            {e.foodName}
+                            {e.newFoodName}
+                        </div>
+                    );
+                })}
+            </div>
             <div
                 style={{
                     display: 'flex',
@@ -52,7 +89,7 @@ const App = () => {
                                 전체 메뉴
                             </div>
                         </div>
-                        {nextFood.map((food, idx) => {
+                        {foodArr.map((food, idx) => {
                             return (
                                 <FoodInfo key={idx}>
                                     <input
@@ -62,15 +99,17 @@ const App = () => {
                                             e.target.checked ? setCheckedFoods([...checkedFoods, e.target.value]) : setCheckedFoods(checkedFoods.filter((item) => item !== e.target.value));
                                         }}
                                     ></input>
-                                    <div style={{ color: 'purple', fontSize: '20px' }}>{food.name}</div>
-                                    <div>{food.kind}</div>
+                                    <div style={{ color: 'purple', fontSize: '20px' }}>{food.name ? food.name : null}</div>
+                                    <div>{food.kind ? food.kind : null}</div>
+                                    <div style={{ color: 'purple', fontSize: '20px' }}>{food.newFoodName ? food.newFoodName : null}</div>
+                                    <div>{food.newFoodKind ? food.newFoodKind : null}</div>
                                 </FoodInfo>
                             );
                         })}
                     </div>
                 </Main>
-                <div>
-                    {/* <ResultFoodBox>
+                {/* <div>
+                    <ResultFoodBox>
                         <div
                             style={{
                                 fontSize: '30px',
@@ -86,18 +125,18 @@ const App = () => {
                             color="secondary"
                             style={{ height: '50px', width: '200px' }}
                             onClick={() => {
-                                setFoodRandomIsOpen(!foodRandomIsOpen);
-                                setCheckedFoodRandomIsOpen(false);
-                                setCount(count);
+                                // setFoodRandomIsOpen(!foodRandomIsOpen);
+                                // setCheckedFoodRandomIsOpen(false);
+                                // setCount(count);
                             }}
                         >
                             돌리기
                         </Button>
                         <h3>오늘의 점심은 ~!</h3>
                         <div style={{ fontWeight: 'bold', fontSize: '25px', color: 'purple' }}>{foodRandomIsOpen === true ? foodRandom.name + ' - ' + foodRandom.kind : null}</div>
-                    </ResultFoodBox> */}
-                </div>
-                <SelectFood data={nextFood} checkedFoods={checkedFoods} />
+                    </ResultFoodBox>
+                </div> */}
+                <SelectFood data={foodArr} checkedFoods={checkedFoods} />
             </Rayout>
         </div>
     );

@@ -40,7 +40,7 @@ export const SelectFood = ({ data, checkedFoods }: SelectFoodProps) => {
             <div>
                 {checkedFoods?.map((food, idx) => {
                     return (
-                        <div key={idx} style={{ display: 'flex', margin: ' 10px 0' }}>
+                        <div key={idx} style={{ width: '200px', display: 'flex', margin: ' 10px 0' }}>
                             <div>{food}</div>
                         </div>
                     );
